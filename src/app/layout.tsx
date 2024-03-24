@@ -1,13 +1,12 @@
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
-
 import { TRPCReactProvider } from "~/trpc/react";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { BsFire } from "react-icons/bs";
+import Link from "next/link";
+import { getServerAuthSession } from "~/server/auth";
+import DropDown from "~/components/DropDown";
+import { Toaster } from "react-hot-toast";
+import { IoMdAdd } from "react-icons/io";
 
 export const metadata = {
   title: "Create T3 App",
@@ -15,15 +14,47 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerAuthSession();
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`container font-sans`}>
+        <nav className="flex items-center justify-between py-2">
+          <h1 className="font-Montserrat text-4xl font-bold ">
+            hive
+            <span className="logo-gradient">
+              mind<span className="font-[900]">.</span>
+            </span>{" "}
+          </h1>
+          <ul className="flex items-center gap-2 font-medium md:gap-10">
+            <li className="">
+              <Link
+                href="/"
+                className="flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 font-Montserrat hover:bg-gray-200"
+              >
+                <IoMdAdd className="text-orange-500" />{" "}
+                <span className="hidden md:inline-block">Create Poll</span>
+              </Link>
+            </li>
+            <li>
+              {session?.user && session.user.name ? (
+                <>
+                  <DropDown />
+                </>
+              ) : (
+                <div className="rounded-full bg-light-black px-3 py-1 font-Montserrat text-white">
+                  <a href="/api/auth/signin">Sign in</a>
+                </div>
+              )}
+            </li>
+          </ul>
+        </nav>
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Toaster />
       </body>
     </html>
   );
