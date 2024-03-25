@@ -167,4 +167,14 @@ export const pollRouter = createTRPCRouter({
         },
       })) as Poll[];
     }),
+
+  deletePoll: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return (await ctx.db.poll.delete({
+        where: {
+          id: input.id,
+        },
+      })) as Poll;
+    }),
 });

@@ -45,6 +45,16 @@ const PollId = ({
 
   const getPoll = api.poll.get.useQuery({ id: pollId });
 
+  const deletePoll = api.poll.deletePoll.useMutation({
+    onSuccess: (data) => {
+      toast.success("Poll deleted successfully");
+      router.push("/");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const alreadyVoted = api.poll.alreadyVoted.useQuery({
     id: pollId,
   });
@@ -124,6 +134,16 @@ const PollId = ({
     });
   };
 
+  const handleDelete = () => {
+    const confirmation = confirm("Are you sure you want to delete this poll?");
+    if (confirmation) {
+      deletePoll.mutate({ id: pollId });
+      return;
+    } else {
+      return;
+    }
+  };
+
   const handleShare = () => {
     navigator.clipboard
       .writeText(`${window.location.origin}/${pollId}`)
@@ -201,7 +221,12 @@ const PollId = ({
               </div>
             </div>
           </div>
-          <div className="flex w-full justify-end">
+          <div className="flex w-full justify-end gap-2">
+            {userId && (
+              <Button onClick={handleDelete} variant="destructive">
+                Delete
+              </Button>
+            )}
             <Button
               disabled={getPoll?.data?.expired}
               onClick={handleVote}
