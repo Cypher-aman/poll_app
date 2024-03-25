@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   FormField,
   FormItem,
@@ -12,7 +13,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { Button } from "~/components/ui/button";
 
 interface SecondSceneProps {
-  form: unknown;
+  form: any;
 }
 
 const SecondScene: React.FC<SecondSceneProps> = ({ form }) => {
@@ -38,7 +39,7 @@ const SecondScene: React.FC<SecondSceneProps> = ({ form }) => {
           <>
             <FormField
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-              control={form.control as any}
+              control={form.control}
               key={field.id}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               name={`options.${index}.option` as any}

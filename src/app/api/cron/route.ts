@@ -28,7 +28,11 @@ export async function GET(req: NextRequest, res: Response) {
         console.log(`Poll ID ${poll.id} expired.`);
       }
     }
+
+    return NextResponse.json({ message: "Cron job completed successfully" });
   } catch (error) {
     console.error("Error occurred:", error);
+
+    return NextResponse.json({ message: "Cron job failed" }, { status: 500 });
   }
 }
